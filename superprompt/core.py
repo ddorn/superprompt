@@ -1,3 +1,7 @@
+"""
+This modules defines functions to enhance the basic input() for the standard lib with autocompletion.
+"""
+
 import glob
 import os
 from pathlib import Path
@@ -85,6 +89,12 @@ def prompt_file(prompt, default=None, must_exist=True):
     return r
 
 def prompt_choice(prompt, possibilities, default=None):
+    """
+    Prompt for a string in a given range of possibilities.
+
+    The default must be in this range too.
+    """
+
     assert len(possibilities) >= 1
     assert default is None or default in possibilities
 

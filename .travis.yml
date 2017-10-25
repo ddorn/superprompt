@@ -1,0 +1,15 @@
+language: python
+python:
+  - '3.6'
+script:
+  - pytest test
+install:
+  - pip install man
+  - pip install -r requirements.txt
+deploy:
+  provider: pypi
+  user: 'ddorn'
+  password: mypassword 
+  on:
+    condition: $TRAVIS_PYTHON_VERSION = "3.6"
+    tags: true

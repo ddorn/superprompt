@@ -1,0 +1,15 @@
+{
+    "data_files": [],
+    "dependancies": [],
+    "description": "Prompting on steroids",
+    "email": "diego.dorn@free.fr",
+    "fullname": "Diego Dorn",
+    "github_username": "ddorn",
+    "libname": "superprompt",
+    "package_data": {},
+    "packages": [
+        "superprompt"
+    ],
+    "pypi_username": "ddorn",
+    "version": "0.0.0"
+}

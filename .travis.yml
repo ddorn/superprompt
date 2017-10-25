@@ -1,15 +1,16 @@
 language: python
 python:
-  - '3.6'
+- '3.6'
 script:
-  - pytest test
+- pytest test
 install:
-  - pip install man
-  - pip install -r requirements.txt
+- pip install man
+- pip install -r requirements.txt
 deploy:
   provider: pypi
-  user: 'ddorn'
-  password: mypassword 
+  user: ddorn
+  password:
+    secure: JQDM+/thP9ABDpn2l2ia5DmhZQrCAqNRR2V90yMWnQ1LTLK7wQPl7b3W1g+s8D1JsuN6QSAHqbG5cbeuW+xQuQ5QRXtiWrpzenXjvwtfXjywkDpj8NBIt4rkbeAQ0kq0WyNr07LBST/J7cqdOMy0DA7I3wFE/xwoPEQjRaoRwhCLmcjIqKaH1IIGvLqc0vpnbMzo96K2fpmOhCVh0lL3dvet6/+WiRc1f1UJUrUxPTQlDat015PatbUjaJIsj6nnXCqpGof3uoc5I3/NEBM15tTCW+D/Tc0/2GSOREOVDHiqwRcU7pEtCOp21drGWLXdxHT46C6zhkoOBHK3DWjILTCKX4c+6baLjD1NMEEmNoWHBXdkcdRz+Z8lNe+LIfk9rSfIzbaYtx6XiWQ+dKe17iewX3TucO1bNhHK/F6cwnug5ldmYX1hungyyRsLLl1t/7nL2Z0t7kI6G9fIihd4jfa2oAmoVRkUxGD/1o0JAq2PjR2XhBGS5Copx1XAY7H4slWyVtN3FufkNaYxMCxZ+e8gtsHh+F9zLepDYutIRt9lPb4ck8ZaDscKJJF5Ctuq+b5O6pqxHaEdbuhfVEzQdgzLTTIzpubTvAbUKe2xXG0hgoKRfOSZ8dwFAqGnVTs6yRP/kzWChxESlsd223aw/ZzIbCjO2y7r3PiAEeByXdw=
   on:
     condition: $TRAVIS_PYTHON_VERSION = "3.6"
     tags: true

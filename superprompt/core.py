@@ -48,7 +48,14 @@ def prompt_autocomplete(prompt, complete, default=None):
     return r
 
 
-def prompt_file(prompt, default=None):
+def prompt_file(prompt, default=None, must_exist=True):
+    """
+    Prompt a filename using using glob for autocompetion.
+    
+    If must_exist is True (default) then you can be sure that the value returned 
+    is an existing filename or directory name.
+    """
+
     def complete(text):
         text = text.replace('~', HOME)
 
@@ -67,8 +74,15 @@ def prompt_file(prompt, default=None):
 
         return suggs
     
-    return prompt_autocomplete(prompt, complete, default)
+    if must_exist:
+        r = prompt_autocomplete(prompt, complete, default)
+        while not os.path.exists(r):
+            print('This path does not exist.')
+            r = prompt_autocomplete(prompt, complete, default)
+    else:
+        r = prompt_autocomplete(prompt, complete, default)
 
+    return r
 
 def prompt_choice(prompt, possibilities, default=None):
     assert len(possibilities) >= 1

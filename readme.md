@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/ddorn/superprompt.svg?branch=v1.0.0)](https://travis-ci.org/ddorn/superprompt)
+[![Build Status](https://travis-ci.org/ddorn/superprompt.svg?branch=v1.1.0)](https://travis-ci.org/ddorn/superprompt)
 
 # superprompt
 

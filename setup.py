@@ -10,7 +10,7 @@ except FileNotFoundError:
 
 setup(
     name='superprompt',
-    version='1.0.0',
+    version='1.1.0',
     packages=['superprompt'],
     url='https://github.com/ddorn/superprompt',
     license='MIT',

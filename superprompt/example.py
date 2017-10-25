@@ -6,6 +6,7 @@ def complete(text):
 def main():
     print(core.prompt_autocomplete('Custom', complete))
     print(core.prompt_file('File'))
+    print(core.prompt_file('Directory', None, True, True))
     print(core.prompt_choice('Favourite color', 'red green blue purple orange pink purple black brown'.split()))
     print(core.prompt_choice('Favourite color', 'red green blue orange pink purple black brown purple'.split(), 'orange'))
 

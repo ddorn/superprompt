@@ -52,18 +52,20 @@ def prompt_autocomplete(prompt, complete, default=None):
     return r
 
 
-def prompt_file(prompt, default=None, must_exist=True):
+def prompt_file(prompt, default=None, must_exist=True, is_dir=False):
     """
     Prompt a filename using using glob for autocompetion.
     
     If must_exist is True (default) then you can be sure that the value returned 
     is an existing filename or directory name.
+    If is_dir is True, this will show only the directories for the completion.
     """
 
     def complete(text):
         text = text.replace('~', HOME)
 
         suggs = glob.glob(text + '*')
+        real_sugg = []
 
         if suggs:
             for i, sugg in enumerate(suggs):
@@ -74,9 +76,12 @@ def prompt_file(prompt, default=None, must_exist=True):
                 if os.path.isdir(sugg) and not sugg.endswith('/'):
                     sugg += '/'
 
-                suggs[i] = sugg
+                if is_dir and not os.path.isdir(sugg):
+                    continue
 
-        return suggs
+                real_sugg.append(sugg)
+
+        return real_sugg
     
     if must_exist:
         r = prompt_autocomplete(prompt, complete, default)

@@ -69,4 +69,20 @@ def prompt_file(prompt, default=None):
     
     return prompt_autocomplete(prompt, complete, default)
 
-__all__ = ['prompt_autocomplete', 'prompt_file']
+
+def prompt_choice(prompt, possibilities, default=None):
+    assert len(possibilities) >= 1
+    assert default is None or default in possibilities
+
+    def complete(text):
+        return [t for t in possibilities if t.startswith(text)]
+
+    r = prompt_autocomplete(prompt, complete, default)
+    while r not in possibilities:
+        print('%s is not a possibility.' % r)
+        r = prompt_autocomplete(prompt, complete, default)
+
+    return r
+
+
+__all__ = ['prompt_autocomplete', 'prompt_file', 'prompt_choice']

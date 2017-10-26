@@ -93,7 +93,7 @@ def prompt_file(prompt, default=None, must_exist=True, is_dir=False):
 
     return r
 
-def prompt_choice(prompt, possibilities, default=None):
+def prompt_choice(prompt, possibilities, default=None, only_in_poss=True):
     """
     Prompt for a string in a given range of possibilities.
 
@@ -101,13 +101,13 @@ def prompt_choice(prompt, possibilities, default=None):
     """
 
     assert len(possibilities) >= 1
-    assert default is None or default in possibilities
+    assert not only_in_poss or default is None or default in possibilities
 
     def complete(text):
         return [t for t in possibilities if t.startswith(text)]
 
     r = prompt_autocomplete(prompt, complete, default)
-    while r not in possibilities:
+    while only_in_poss and r not in possibilities:
         print('%s is not a possibility.' % r)
         r = prompt_autocomplete(prompt, complete, default)
 

@@ -1,10 +1,12 @@
 {
+    "classifiers": [],
     "data_files": [],
     "dependancies": [],
     "description": "Prompting on steroids",
     "email": "diego.dorn@free.fr",
     "fullname": "Diego Dorn",
     "github_username": "ddorn",
+    "keywords": "",
     "libname": "superprompt",
     "package_data": {},
     "packages": [

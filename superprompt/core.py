@@ -16,7 +16,7 @@ except ModuleNotFoundError:
 HOME = str(Path.home())
 
 
-def prompt_autocomplete(prompt, complete, default=None):
+def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, show_default=True):
     """
     Prompt a string with autocompletion
 
@@ -32,12 +32,15 @@ def prompt_autocomplete(prompt, complete, default=None):
             return possibilities[state]
         return None
 
-    readline.set_completer_delims(' \t\n;')
+    readline.set_completer_delims('\t\n' + ' ' * not contains_spaces)
     readline.parse_and_bind("tab: complete")
     readline.set_completer(real_completer)
 
     if default is not None:
-        r = input('%s [%s]: ' % (prompt, default))
+        if show_default:
+            r = input('%s [%s]: ' % (prompt, default))
+        else:
+            r = input('%s: ' % prompt)            
     else:
         r = ''
         while not r:
@@ -103,13 +106,15 @@ def prompt_choice(prompt, possibilities, default=None, only_in_poss=True):
     assert len(possibilities) >= 1
     assert not only_in_poss or default is None or default in possibilities
 
+    contains_spaces = any(' ' in poss for poss in possibilities)
+
     def complete(text):
         return [t for t in possibilities if t.startswith(text)]
 
-    r = prompt_autocomplete(prompt, complete, default)
+    r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces)
     while only_in_poss and r not in possibilities:
         print('%s is not a possibility.' % r)
-        r = prompt_autocomplete(prompt, complete, default)
+        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces)
 
     return r
 

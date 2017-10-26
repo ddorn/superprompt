@@ -4,6 +4,7 @@ This modules defines functions to enhance the basic input() for the standard lib
 
 import glob
 import os
+import colorama
 from pathlib import Path
 
 
@@ -13,33 +14,35 @@ except ModuleNotFoundError:
     print('If you are on windows, you can install pyreadline to have the same functionnalities as readline.')
     raise
 
+colorama.init()
 HOME = str(Path.home())
 
 
-def path_complete(text):
-    text = text.replace('~', HOME)
+def path_complete(is_dir=False):
+    def _path_complete(text):
+        text = text.replace('~', HOME)
 
-    suggs = glob.glob(text + '*')
-    real_sugg = []
+        suggs = glob.glob(text + '*')
+        real_sugg = []
 
-    if suggs:
-        for i, sugg in enumerate(suggs):
+        if suggs:
+            for i, sugg in enumerate(suggs):
 
-            sugg = sugg.replace(HOME, '~')
-            sugg = sugg.replace('\\', '/')
+                sugg = sugg.replace(HOME, '~')
+                sugg = sugg.replace('\\', '/')
 
-            if os.path.isdir(sugg) and not sugg.endswith('/'):
-                sugg += '/'
+                if os.path.isdir(sugg) and not sugg.endswith('/'):
+                    sugg += '/'
 
-            if is_dir and not os.path.isdir(sugg):
-                continue
+                if is_dir and not os.path.isdir(sugg):
+                    continue
 
-            real_sugg.append(sugg)
+                real_sugg.append(sugg)
 
-    return real_sugg
+        return real_sugg
+    return _path_complete
 
-
-def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, show_default=True):
+def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, show_default=True, color=None):
     """
     Prompt a string with autocompletion
 
@@ -58,7 +61,7 @@ def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, sh
     readline.set_completer_delims('\t\n' + ' ' * (not contains_spaces))
     readline.parse_and_bind("tab: complete")
     readline.set_completer(real_completer)
-
+    
     if default is not None:
         if show_default:
             r = input('%s [%s]: ' % (prompt, default))
@@ -88,12 +91,12 @@ def prompt_file(prompt, default=None, must_exist=True, is_dir=False):
     """
 
     if must_exist:
-        r = prompt_autocomplete(prompt, path_complete, default)
+        r = prompt_autocomplete(prompt, path_complete(is_dir), default)
         while not os.path.exists(r):
             print('This path does not exist.')
-            r = prompt_autocomplete(prompt, path_complete, default)
+            r = prompt_autocomplete(prompt, path_complete(is_dir), default)
     else:
-        r = prompt_autocomplete(prompt, path_complete, default)
+        r = prompt_autocomplete(prompt, path_complete(is_dir), default)
 
     return r
 

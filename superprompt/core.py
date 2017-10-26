@@ -16,6 +16,29 @@ except ModuleNotFoundError:
 HOME = str(Path.home())
 
 
+def path_complete(text):
+    text = text.replace('~', HOME)
+
+    suggs = glob.glob(text + '*')
+    real_sugg = []
+
+    if suggs:
+        for i, sugg in enumerate(suggs):
+
+            sugg = sugg.replace(HOME, '~')
+            sugg = sugg.replace('\\', '/')
+
+            if os.path.isdir(sugg) and not sugg.endswith('/'):
+                sugg += '/'
+
+            if is_dir and not os.path.isdir(sugg):
+                continue
+
+            real_sugg.append(sugg)
+
+    return real_sugg
+
+
 def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, show_default=True):
     """
     Prompt a string with autocompletion
@@ -63,36 +86,14 @@ def prompt_file(prompt, default=None, must_exist=True, is_dir=False):
     is an existing filename or directory name.
     If is_dir is True, this will show only the directories for the completion.
     """
-
-    def complete(text):
-        text = text.replace('~', HOME)
-
-        suggs = glob.glob(text + '*')
-        real_sugg = []
-
-        if suggs:
-            for i, sugg in enumerate(suggs):
-
-                sugg = sugg.replace(HOME, '~')
-                sugg = sugg.replace('\\', '/')
-
-                if os.path.isdir(sugg) and not sugg.endswith('/'):
-                    sugg += '/'
-
-                if is_dir and not os.path.isdir(sugg):
-                    continue
-
-                real_sugg.append(sugg)
-
-        return real_sugg
     
     if must_exist:
-        r = prompt_autocomplete(prompt, complete, default)
+        r = prompt_autocomplete(prompt, path_complete, default)
         while not os.path.exists(r):
             print('This path does not exist.')
-            r = prompt_autocomplete(prompt, complete, default)
+            r = prompt_autocomplete(prompt, path_complete, default)
     else:
-        r = prompt_autocomplete(prompt, complete, default)
+        r = prompt_autocomplete(prompt, path_complete, default)
 
     return r
 

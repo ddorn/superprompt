@@ -1,7 +1,9 @@
 {
     "classifiers": [],
     "data_files": [],
-    "dependancies": [],
+    "dependancies": [
+        "colorama"
+    ],
     "description": "Prompting on steroids",
     "email": "diego.dorn@free.fr",
     "fullname": "Diego Dorn",

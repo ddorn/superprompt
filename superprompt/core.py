@@ -146,7 +146,7 @@ def prompt_choice(prompt, possibilities, default=None, only_in_poss=True, show_d
         return [t for t in possibilities if t.startswith(text)]
 
     while 1:
-        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces, show_default=show_default, color=None)
+        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces, show_default=show_default, color=color)
         if not only_in_poss or r in possibilities:
             break
         print('%s is not a possibility.' % r)

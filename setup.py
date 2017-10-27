@@ -10,7 +10,7 @@ except FileNotFoundError:
 
 setup(
     name='superprompt',
-    version='1.1.0',
+    version='1.2.0',
     packages=['superprompt'],
     url='https://github.com/ddorn/superprompt',
     license='MIT',
@@ -18,6 +18,8 @@ setup(
     author_email='diego.dorn@free.fr',
     description='Prompting on steroids',
     long_description=long_description,
-    install_requires=[],
-    include_package_data=True
+    install_requires=['colorama'],
+    include_package_data=True,
+    
+    keywords=''
 )

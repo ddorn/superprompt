@@ -5,6 +5,7 @@ This modules defines functions to enhance the basic input() for the standard lib
 import glob
 import os
 import colorama
+from colorama import Fore
 from pathlib import Path
 
 
@@ -42,6 +43,7 @@ def path_complete(is_dir=False):
         return real_sugg
     return _path_complete
 
+
 def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, show_default=True, color=None):
     """
     Prompt a string with autocompletion
@@ -62,15 +64,32 @@ def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, sh
     readline.parse_and_bind("tab: complete")
     readline.set_completer(real_completer)
     
+    if default is not None and show_default:
+        prompt += ' [%s]' % default
+
+    prompt += ': '
+
+    colors = {
+        'red': Fore.RED,
+        'blue': Fore.BLUE,
+        'green': Fore.GREEN,
+        'cyan': Fore.CYAN,
+        'magenta': Fore.MAGENTA,
+        'yellow': Fore.YELLOW,
+        'white': Fore.WHITE,
+        'black': Fore.LIGHTBLACK_EX
+    }
+
+    if color:
+        prompt = colors[color.lower()] + prompt + Fore.RESET
+
     if default is not None:
-        if show_default:
-            r = input('%s [%s]: ' % (prompt, default))
-        else:
-            r = input('%s: ' % prompt)
+        r = input(prompt)
     else:
-        r = ''
-        while not r:
-            r = input('%s: ' % prompt)
+        while True:
+            r = input(prompt)
+            if r:
+                break
 
     r = r or default
 
@@ -81,7 +100,7 @@ def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, sh
     return r
 
 
-def prompt_file(prompt, default=None, must_exist=True, is_dir=False):
+def prompt_file(prompt, default=None, must_exist=True, is_dir=False, show_default=True, color=None):
     """
     Prompt a filename using using glob for autocompetion.
 
@@ -91,16 +110,18 @@ def prompt_file(prompt, default=None, must_exist=True, is_dir=False):
     """
 
     if must_exist:
-        r = prompt_autocomplete(prompt, path_complete(is_dir), default)
-        while not os.path.exists(r):
+        while True:
+            r = prompt_autocomplete(prompt, path_complete(is_dir), default, show_default=show_default, color=color)
+            if os.path.exists(r):
+                break
             print('This path does not exist.')
-            r = prompt_autocomplete(prompt, path_complete(is_dir), default)
     else:
-        r = prompt_autocomplete(prompt, path_complete(is_dir), default)
+        r = prompt_autocomplete(prompt, path_complete(is_dir), default, show_default=show_default, color=color)
 
     return r
 
-def prompt_choice(prompt, possibilities, default=None, only_in_poss=True):
+
+def prompt_choice(prompt, possibilities, default=None, only_in_poss=True, show_default=True, color=None):
     """
     Prompt for a string in a given range of possibilities.
 
@@ -111,7 +132,7 @@ def prompt_choice(prompt, possibilities, default=None, only_in_poss=True):
     """
 
     assert len(possibilities) >= 1
-    assert not only_in_poss or default is None or default in possibilities
+    assert not only_in_poss or default is None or default in possibilities, '$s not in possibilities' % default
 
     contains_spaces = any(' ' in poss for poss in possibilities)
 
@@ -124,11 +145,12 @@ def prompt_choice(prompt, possibilities, default=None, only_in_poss=True):
     def complete(text):
         return [t for t in possibilities if t.startswith(text)]
 
-    r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces)
-    while only_in_poss and r not in possibilities:
+    while 1:
+        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces, show_default=show_default, color=None)
+        if not only_in_poss or r in possibilities:
+            break
         print('%s is not a possibility.' % r)
-        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces)
-
+        
     readline.clear_history()
 
     return r

@@ -44,7 +44,8 @@ def path_complete(is_dir=False):
     return _path_complete
 
 
-def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, show_default=True, color=None):
+def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, 
+                        show_default=True, prompt_suffix=': ', color=None):
     """
     Prompt a string with autocompletion
 
@@ -67,7 +68,7 @@ def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, sh
     if default is not None and show_default:
         prompt += ' [%s]' % default
 
-    prompt += ': '
+    prompt += prompt_suffix
 
     colors = {
         'red': Fore.RED,
@@ -100,7 +101,8 @@ def prompt_autocomplete(prompt, complete, default=None, contains_spaces=True, sh
     return r
 
 
-def prompt_file(prompt, default=None, must_exist=True, is_dir=False, show_default=True, color=None):
+def prompt_file(prompt, default=None, must_exist=True, is_dir=False, 
+                show_default=True, prompt_suffix=': ', color=None):
     """
     Prompt a filename using using glob for autocompetion.
 
@@ -111,17 +113,20 @@ def prompt_file(prompt, default=None, must_exist=True, is_dir=False, show_defaul
 
     if must_exist:
         while True:
-            r = prompt_autocomplete(prompt, path_complete(is_dir), default, show_default=show_default, color=color)
+            r = prompt_autocomplete(prompt, path_complete(is_dir), default, show_default=show_default,
+                                    prompt_suffix=prompt_suffix, color=color)
             if os.path.exists(r):
                 break
             print('This path does not exist.')
     else:
-        r = prompt_autocomplete(prompt, path_complete(is_dir), default, show_default=show_default, color=color)
+        r = prompt_autocomplete(prompt, path_complete(is_dir), default, show_default=show_default,
+                                prompt_suffix=prompt_suffix, color=color)
 
     return r
 
 
-def prompt_choice(prompt, possibilities, default=None, only_in_poss=True, show_default=True, color=None):
+def prompt_choice(prompt, possibilities, default=None, only_in_poss=True, 
+                  show_default=True, prompt_suffix=': ', color=None):
     """
     Prompt for a string in a given range of possibilities.
 
@@ -146,7 +151,8 @@ def prompt_choice(prompt, possibilities, default=None, only_in_poss=True, show_d
         return [t for t in possibilities if t.startswith(text)]
 
     while 1:
-        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces, show_default=show_default, color=color)
+        r = prompt_autocomplete(prompt, complete, default, contains_spaces=contains_spaces, 
+                                show_default=show_default, prompt_suffix=prompt_suffix, color=color)
         if not only_in_poss or r in possibilities:
             break
         print('%s is not a possibility.' % r)

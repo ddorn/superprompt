@@ -2,7 +2,8 @@
     "classifiers": [],
     "data_files": [],
     "dependancies": [
-        "colorama"
+        "colorama",
+        "pyreadline==2.*"
     ],
     "description": "Prompting on steroids",
     "email": "diego.dorn@free.fr",
